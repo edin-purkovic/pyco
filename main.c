@@ -4,7 +4,7 @@
 
 int main()
 {
-
+    // debugging the work done so far
     printf("testing lexer - starting\n");
 
     char *input1 = "\

@@ -1011,14 +1011,14 @@ inline pyco_uint16 _parser_get_prefix_binding_power(pyco_uint32 operator)
     return 0;
 }
 
-pyco_uint32 clearBit(pyco_uint32 N, pyco_uint32 K)
+inline pyco_uint32 clear_bit(pyco_uint32 N, pyco_uint32 K)
 {
     return (N & (~(1 << (K - 1))));
 }
 
 inline pyco_uint16 _parser_get_infix_binding_power(pyco_uint32 operator)
 {
-    pyco_uint32 new_operator = clearBit(operator, PYCO_OPERATOR_COMPOSITE);
+    pyco_uint32 new_operator = clear_bit(operator, PYCO_OPERATOR_COMPOSITE);
 
     switch (new_operator)
     {
@@ -1044,7 +1044,7 @@ inline pyco_uint16 _parser_get_infix_binding_power(pyco_uint32 operator)
 
 inline pyco_uint16 _parser_get_postfix_binding_power(pyco_uint32 operator)
 {
-    pyco_uint32 new_operator = clearBit(operator, PYCO_OPERATOR_COMPOSITE);
+    pyco_uint32 new_operator = clear_bit(operator, PYCO_OPERATOR_COMPOSITE);
 
     switch (new_operator)
     {
@@ -1078,7 +1078,7 @@ inline bool _parser_is_infix_operator(pyco_uint32 operator)
 
 inline const bool _parser_is_prefix_operator(pyco_uint32 operator)
 {
-    pyco_uint32 new_operator = clearBit(operator, PYCO_OPERATOR_COMPOSITE);
+    pyco_uint32 new_operator = clear_bit(operator, PYCO_OPERATOR_COMPOSITE);
 
     switch (new_operator)
     {
@@ -1091,7 +1091,7 @@ inline const bool _parser_is_prefix_operator(pyco_uint32 operator)
 
 inline const bool _parser_is_postfix_operator(pyco_uint32 operator)
 {
-    pyco_uint32 new_operator = clearBit(operator, PYCO_OPERATOR_COMPOSITE);
+    pyco_uint32 new_operator = clear_bit(operator, PYCO_OPERATOR_COMPOSITE);
 
     switch (new_operator)
     {
@@ -1811,6 +1811,7 @@ pyco_compiled_program pyco_compile(const pyco_uint8 *data, pyco_uint64 size, pyc
     };
 
     lexer_process_buffer(lexer, &buffer);
+    // for debugging purposes, will be removed
     printf("testing lexer - token count: %lld\n\n", lexer->tokens_count);
 
     build_ast_options ast_options = {
@@ -1819,6 +1820,8 @@ pyco_compiled_program pyco_compile(const pyco_uint8 *data, pyco_uint64 size, pyc
     };
 
     pyco_ast ast = parser_build_ast(lexer, ast_options);
+
+    // for debugging purposes, will be removed
     pyco_ast_node_to_json_file("tree_output.js", ast.root_node, data);
     pyco_ast_free(&ast, ast.root_node);
 
